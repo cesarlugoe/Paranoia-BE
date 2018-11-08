@@ -11,7 +11,7 @@ const cors = require('cors');
 require('dotenv').config();
 
 const auth = require('./routes/auth');
-const game = requier('./routes/game');
+const game = require('./routes/game');
 
 mongoose.connect(process.env.MONGODB_URI, {
   keepAlive: true,

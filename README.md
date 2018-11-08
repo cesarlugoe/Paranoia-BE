@@ -176,10 +176,10 @@ Routes
   killLog: Array of objects
 
 - Missions 
-  - title 
-  - target
-  - killer
-  - id- code 
+  title 
+  target
+  killer
+  id- code 
 
   ## Links
 

@@ -94,7 +94,7 @@ Routes
     .populate()
    res.status(200).Json + Game data
 
-- POST /game/create
+- POST /game
   game info Object (model),
   $ Required fields $
   New Game {game info object}
@@ -104,7 +104,7 @@ Routes
     game.save()
       res.status(200).JSON + game Data
 
-- PATCH /game/:id/edit
+- PUT /game/:id
   gameID, currentUserID, gameInfo,
   
   Game.db.find(gameID)
@@ -136,7 +136,7 @@ Routes
     save game
       res.status(200).Json + game info
 
-- POST /gameplay/:id/kill
+- POST /game/:id/kill
    targetID, gameID, killCode
 
    Game.find(gameID)
@@ -147,7 +147,7 @@ Routes
           res.status(200).Json + game Info
 
 
-- GET /gameplay/over
+- DELETE /game/:ID/over
   gameID, currentUserID
 
   Game.db.find(gameID)
@@ -157,6 +157,29 @@ Routes
         res.status + message
 
 
+## Models ##
+
+- User model
+  username: String unique
+  email: String unique
+  password: hashed String
+
+- Game model
+  roomName: String
+  admin: [ObjectID]
+  participants: Array of [ObjectID] OF USER
+  missions: [{ 
+    
+  }]
+  ending date: date
+  number of survivors: Number
+  killLog: Array of objects
+
+- Missions 
+  - title 
+  - target
+  - killer
+  - id- code 
 
   ## Links
 

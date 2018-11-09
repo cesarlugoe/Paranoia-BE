@@ -15,6 +15,7 @@ router.get('/:_id', (req, res, next) => {
   const gameId = req.params._id;
 
 Game.findById(gameId)
+  .populate('admin')
   .populate('participants')
   .then((game) => {
     res.status(200).json(game);
@@ -25,8 +26,8 @@ Game.findById(gameId)
 
 /* ------------ Create new Game --------------*/
 
-router.post('/:_id', (req, res, next) => {
-  const roomName = req.body;
+router.post('/', (req, res, next) => {
+  const { roomName } = req.body;
   const adminId = req.session.currentUser._id;
   
 
@@ -39,7 +40,8 @@ router.post('/:_id', (req, res, next) => {
 
   const newGame = new Game({ 
     roomName,
-    admin: ObjectId(adminId), 
+    admin: ObjectId(adminId),
+    participants: [ObjectId(adminId)],
   });
   newGame.save()
   .then(() => {

@@ -10,6 +10,49 @@ const helpers= require('../helpers/helpers');
 
 
 
+
+/* ------------- Game Join ----------------*/
+/*- POST game/:id/join 
+  UserID, joinInfo 
+  $ Required fields $ (QR || code), (mission || randomM)
+  Game.db.find(gameCode)
+    game.participant.push(UserID)
+    game.mission.push(mission)
+    game.save()
+      res.status(200) {game data} */
+
+
+router.post('/join', (req, res, next) => {
+  const { mission, roomName }  = req.body;
+  const userId = req.session.currentUser._id;
+  console.log("hola");
+
+
+
+  if(!mission || !roomName) {
+    return res.status(422).json(
+      {
+      error: 'empty field'
+    })
+  }
+  Game.findOne({roomName: roomName})
+    .then(game => {
+      const isInArray = game.participants.some(participant => {
+        return participant.equals(userId);
+        })
+        if(!isInArray) {
+          game.participants.push(ObjectId(userId))
+          game.missions.push({ mission: mission })
+          game.save()
+          .then(() => {
+            res.status(200).json(game);
+      })
+      .catch(next);
+      }
+    })
+    .catch(next)
+})
+
 /* ------------ Game Detail --------------*/
 
 router.get('/:_id', (req, res, next) => {
@@ -35,7 +78,7 @@ router.post('/', (req, res, next) => {
   if(!roomName) {
     return res.status(422).json(
       {
-      error: 'empy field'
+      error: 'empty field'
     })
   }
 

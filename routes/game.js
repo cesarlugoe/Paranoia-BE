@@ -22,6 +22,7 @@ router.post('/join', (req, res, next) => {
       error: 'empty field'
     })
   }
+
   Game.findOne({roomName: roomName})
     .then(game => {
       const isInArray = game.participants.some(participant => {
@@ -29,7 +30,7 @@ router.post('/join', (req, res, next) => {
         })
         if(!isInArray) {
           game.participants.push(ObjectId(userId))
-          game.missions.push({ mission: mission })
+          game.missions.push({ mission })
           game.save()
           .then(() => {
             res.status(200).json(game);

@@ -6,10 +6,10 @@ function shuffleParticipants(participants) {
   return participants;
 }
 
-function reverseArray(array) {
-  return array.reverse(/./g, function(c) {
-    return array.pairs[c]
-  });
+function rearrengeArray(array) {
+  const changedPosition = array[0];
+  array.push(changedPosition);
+  return array.slice(1)
 }
 
 
@@ -21,7 +21,7 @@ function sortGame(mission, participants) {
     mission[index].target = participant;
   });
 
-  sortedParticipants = reverseArray(sortedParticipants);
+  sortedParticipants = rearrengeArray(sortedParticipants);
 
   sortedParticipants.forEach((participant, index)  => {
     mission[index].killer = participant;

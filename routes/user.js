@@ -13,5 +13,21 @@ router.get('/', (req, res, next) => {
     .catch(next)
 })
 
+router.patch('/:_id/edit', (req, res, next) => {
+  const userId = req.params._id;
+  const userInfo = req.body.userInfo;
+   User.findById(userId)
+   .then(user => {
+     user.quote = userInfo.quote;
+     console.log(user);
+     user.save()
+     .then(
+      res.status(200).json(user)
+     )
+     .catch(next)
+   })
+   .catch(next)
+})
+
 
 module.exports = router;

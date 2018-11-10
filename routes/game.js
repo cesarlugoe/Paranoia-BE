@@ -5,7 +5,8 @@ const ObjectId = mongoose.Types.ObjectId;
 
 const User = require('../models/user');
 const Game = require('../models/game');
-const Mission = require('../models/game');
+const Mission = require('../models/mission');
+const helpers= require('../helpers/helpers');
 
 
 
@@ -93,6 +94,24 @@ router.post('/', (req, res, next) => {
   .catch(next);  
 });
 
+/* ------------ Start Game --------------*/
 
+router.get('/:_id/start', (req, res, next) => {
+  const gameId = req.params._id;
+  Game.findById(gameId)
+  .populate('admin')
+  .populate('participants')
+  .then(game => {
+    const { missions, participants } = game;
+    const sortedMissions = helpers.sortGame(missions, participants);
+    game.missions = sortedMissions;
+    game.save()
+    .then(() => {
+      res.status(200).json(game);
+    })
+    .catch(next); 
+  })
+  .catch(next);
+});
 
 module.exports = router;

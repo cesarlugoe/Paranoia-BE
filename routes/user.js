@@ -21,6 +21,7 @@ router.get('/', (req, res, next) => {
     .catch(next)
 })
 
+   
 router.patch('/:_id/edit', (req, res, next) => {
   const userId = req.params._id;
   const userInfo = req.body.userInfo;

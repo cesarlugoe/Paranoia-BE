@@ -14,7 +14,7 @@ router.get('/', (req, res, next) => {
       })
       .then(games => {
         const data = {games, user}
-      res.status(200).json(data)
+        res.status(200).json(data)
       })
       .catch(next)
     })

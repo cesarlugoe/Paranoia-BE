@@ -59,7 +59,7 @@ Game.findById(gameId)
 /* ------------ Create new Game --------------*/
 
 router.post('/', (req, res, next) => {
-  const { roomName } = req.body;
+  const { roomName, mission } = req.body;
   const adminId = req.session.currentUser._id;
   
 
@@ -72,6 +72,7 @@ router.post('/', (req, res, next) => {
 
   const newGame = new Game({ 
     roomName,
+    missions: { mission },
     admin: ObjectId(adminId),
     participants: [ObjectId(adminId)],
   });

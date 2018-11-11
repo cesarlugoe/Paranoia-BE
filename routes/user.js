@@ -21,9 +21,7 @@ router.get('/', (req, res, next) => {
     .catch(next)
 })
 
-<<<<<<< HEAD
    
-=======
 router.patch('/:_id/edit', (req, res, next) => {
   const userId = req.params._id;
   const userInfo = req.body.userInfo;
@@ -40,6 +38,5 @@ router.patch('/:_id/edit', (req, res, next) => {
    .catch(next)
 })
 
->>>>>>> 538456f547520623aa68480e70c52363eb81cd70
 
 module.exports = router;

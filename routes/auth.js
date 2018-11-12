@@ -80,6 +80,7 @@ router.post('/signup', (req, res, next) => {
       const newUser = User({
         username,
         password: hashPass,
+        image: 'http://www.bkie.com/dist/assets/images/default-user.png'
       });
 
       return newUser.save().then(() => {

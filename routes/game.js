@@ -15,16 +15,13 @@ const helpers= require('../helpers/helpers');
 router.post('/join', (req, res, next) => {
   const { mission, roomName }  = req.body;
   const userId = req.session.currentUser._id;
-  console.log("hola");
-
-
-
   if(!mission || !roomName) {
     return res.status(422).json(
       {
       error: 'empty field'
     })
   }
+
   Game.findOne({roomName: roomName})
     .then(game => {
       const isInArray = game.participants.some(participant => {
@@ -32,7 +29,7 @@ router.post('/join', (req, res, next) => {
         })
         if(!isInArray) {
           game.participants.push(ObjectId(userId))
-          game.missions.push({ mission: mission })
+          game.missions.push({ mission, target:'', killer:'' })
           game.save()
           .then(() => {
             res.status(200).json(game);
@@ -47,11 +44,11 @@ router.post('/join', (req, res, next) => {
 
 router.get('/:_id', (req, res, next) => {
   const gameId = req.params._id;
-
 Game.findById(gameId)
   .populate('admin')
   .populate('participants')
   .then((game) => {
+    
     res.status(200).json(game);
   })
   .catch(next);
@@ -60,8 +57,10 @@ Game.findById(gameId)
 /* ------------ Create new Game --------------*/
 
 router.post('/', (req, res, next) => {
-  const { roomName } = req.body;
+  const { roomName, mission } = req.body;
   const adminId = req.session.currentUser._id;
+  let target = '';
+  let killer = '';
   
 
   if(!roomName) {
@@ -71,8 +70,15 @@ router.post('/', (req, res, next) => {
     })
   }
 
+  const newMission = new Mission ({
+    killer:{},
+    target:{},
+    mission: mission,
+  })
+
   const newGame = new Game({ 
     roomName,
+    missions: [ObjectId],
     admin: ObjectId(adminId),
     participants: [ObjectId(adminId)],
   });
@@ -87,18 +93,19 @@ router.post('/', (req, res, next) => {
 
 router.get('/:_id/start', (req, res, next) => {
   const gameId = req.params._id;
-  console.log(gameId);
   Game.findById(gameId)
   .populate('admin')
   .populate('participants')
+  .lean()
   .then(game => {
     const { missions, participants } = game;
     const sortedMissions = helpers.sortGame(missions, participants);
     game.missions = sortedMissions;
-    game.save()
-    .then(() => {
-      res.status(200).json(game);
-    })
+    Game.updateOne({_id: gameId}, game)
+      .then((game) => {
+        game._id = gameId
+        res.status(200).json(game);
+      })
     .catch(next); 
   })
   .catch(next);

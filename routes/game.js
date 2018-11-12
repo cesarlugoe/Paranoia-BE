@@ -12,16 +12,6 @@ const helpers= require('../helpers/helpers');
 
 
 /* ------------- Game Join ----------------*/
-/*- POST game/:id/join 
-  UserID, joinInfo 
-  $ Required fields $ (QR || code), (mission || randomM)
-  Game.db.find(gameCode)
-    game.participant.push(UserID)
-    game.mission.push(mission)
-    game.save()
-      res.status(200) {game data} */
-
-
 router.post('/join', (req, res, next) => {
   const { mission, roomName }  = req.body;
   const userId = req.session.currentUser._id;
@@ -67,7 +57,6 @@ Game.findById(gameId)
   .catch(next);
 })
 
-
 /* ------------ Create new Game --------------*/
 
 router.post('/', (req, res, next) => {
@@ -98,6 +87,7 @@ router.post('/', (req, res, next) => {
 
 router.get('/:_id/start', (req, res, next) => {
   const gameId = req.params._id;
+  console.log(gameId);
   Game.findById(gameId)
   .populate('admin')
   .populate('participants')

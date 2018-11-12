@@ -98,6 +98,7 @@ router.get('/:_id/start', (req, res, next) => {
     const { missions, participants } = game;
     const sortedMissions = helpers.sortGame(missions, participants);
     game.missions = sortedMissions;
+    game.numberOfSurvivors = participants.length;
     Game.updateOne({_id: gameId}, game)
       .then((game) => {
         game._id = gameId
@@ -126,6 +127,8 @@ router.post('/:_id/kill', (req, res, next) => {
         });
      missions[newMissionIndex].killer = userId;
      missions.splice(userMissionIndex, 1);
+     game.numberOfSurvivors =  game.numberOfSurvivors -1;
+     console.log(game.numberOfSurvivors)
       game.save()
       .then(() => {
         res.status(200).json(game);

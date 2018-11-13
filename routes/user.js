@@ -4,9 +4,7 @@ const mongoose = require('mongoose');
 const User = require('../models/user');
 const Game = require('../models/game');
 const ObjectId = mongoose.Types.ObjectId;
-// const parser = require('../helpers/cloudinary.js')
-// const upload = require('../helpers/cloudinary')
-// require('../helpers/cloudinary')
+const uploadCloud = require('../helpers/cloudinary.js')
 
 router.get('/', (req, res, next) => {
   const userId = req.session.currentUser._id;
@@ -28,24 +26,22 @@ router.get('/', (req, res, next) => {
 router.patch('/:_id/edit', (req, res, next) => {
   const userId = req.params._id;
   const quote = req.body.userInfo.quote;
-  // let image = req.file
-  // console.log(image)
   
-
- 
-   User.findByIdAndUpdate(userId, {quote: `${quote}`})
-  const userInfo = req.body.userInfo;
-  console.log(req.body)
-   User.findById(userId)
+    User.findByIdAndUpdate(userId, {quote: `${quote}`})
    .then(user => {
       res.status(200).json(user)
    })
    .catch(next)
 })
 
-router.patch('/:_id/picture', (req, res, next) => {
+router.patch('/:_id/picture', uploadCloud.single('picture'), (req, res, next) => {
   const userId = req.params._id;
-  console.log(req.body)
+  let image = req.file
+  User.findByIdAndUpdate(userId, { $set: { image: image.url }}, {new: true})
+  .then((user) => {
+    res.status(200).json(user)
+  })
+  
 })
 
 

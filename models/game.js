@@ -18,6 +18,7 @@ const gameSchema = new Schema({
   numberOfSurvivors: Number,
   killLog:[],
   startedStatus: Boolean,
+  gameFinished: Boolean,
 }, 
   {
   timestamps: {

@@ -34,10 +34,18 @@ router.patch('/:_id/edit', (req, res, next) => {
 
  
    User.findByIdAndUpdate(userId, {quote: `${quote}`})
+  const userInfo = req.body.userInfo;
+  console.log(req.body)
+   User.findById(userId)
    .then(user => {
       res.status(200).json(user)
    })
    .catch(next)
+})
+
+router.patch('/:_id/picture', (req, res, next) => {
+  const userId = req.params._id;
+  console.log(req.body)
 })
 
 

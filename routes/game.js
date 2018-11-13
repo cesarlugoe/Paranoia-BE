@@ -98,6 +98,7 @@ router.get('/:_id/start', (req, res, next) => {
     const { missions, participants } = game;
     const sortedMissions = helpers.sortGame(missions, participants);
     game.missions = sortedMissions;
+    game.numberOfSurvivors = participants.length;
     Game.updateOne({_id: gameId}, game)
       .then((game) => {
         game._id = gameId

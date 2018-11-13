@@ -69,12 +69,6 @@ router.post('/', (req, res, next) => {
     })
   }
 
-  // const newMission = new Mission ({
-  //   killer:{},
-  //   target:{},
-  //   mission: mission,
-  // })
-
   const newGame = new Game({ 
     roomName,
     missions: {mission: mission},
@@ -100,6 +94,7 @@ router.get('/:_id/start', (req, res, next) => {
     const sortedMissions = helpers.sortGame(missions, participants);
     game.missions = sortedMissions;
     game.numberOfSurvivors = participants.length;
+    game.startedStatus = true;
     Game.updateOne({_id: gameId}, game)
       .then((game) => {
         game._id = gameId

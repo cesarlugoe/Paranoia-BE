@@ -23,9 +23,9 @@ router.post('/login', (req, res, next) => {
     });
   }
 
-  const { username, password } = req.body;
+  const { username, password, email } = req.body;
 
-  if (!username || !password) {
+  if (!username || !password || !email) {
     return res.status(422).json({
       error: 'validation'
     });
@@ -55,17 +55,18 @@ router.post('/login', (req, res, next) => {
 router.post('/signup', (req, res, next) => {
   const {
     username,
-    password
+    password,
+    email
   } = req.body;
 
-  if (!username || !password) {
+  if (!username || !password || !email) {
     return res.status(422).json({
       error: 'empty'
     });
   }
 
   User.findOne({
-      username
+      username,
     }, 'username')
     .then((userExists) => {
       if (userExists) {
@@ -80,6 +81,7 @@ router.post('/signup', (req, res, next) => {
       const newUser = User({
         username,
         password: hashPass,
+        email,
         image: 'http://www.bkie.com/dist/assets/images/default-user.png'
       });
 

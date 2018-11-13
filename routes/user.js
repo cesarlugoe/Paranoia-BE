@@ -25,6 +25,7 @@ router.get('/', (req, res, next) => {
 router.patch('/:_id/edit', (req, res, next) => {
   const userId = req.params._id;
   const userInfo = req.body.userInfo;
+  console.log(req.body)
    User.findById(userId)
    .then(user => {
      user.quote = userInfo.quote;
@@ -36,6 +37,11 @@ router.patch('/:_id/edit', (req, res, next) => {
      .catch(next)
    })
    .catch(next)
+})
+
+router.patch('/:_id/picture', (req, res, next) => {
+  const userId = req.params._id;
+  console.log(req.body)
 })
 
 

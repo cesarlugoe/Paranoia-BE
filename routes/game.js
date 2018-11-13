@@ -127,6 +127,8 @@ router.post('/:_id/kill', (req, res, next) => {
         });
      missions[newMissionIndex].killer = userId;
      missions.splice(userMissionIndex, 1);
+     game.numberOfSurvivors =  game.numberOfSurvivors -1;
+     console.log(game.numberOfSurvivors)
       game.save()
       .then(() => {
         res.status(200).json(game);

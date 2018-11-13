@@ -63,7 +63,7 @@ router.post('/', (req, res, next) => {
   const adminId = req.session.currentUser._id;
   
 
-  if(!roomName) {
+  if(!roomName || !mission) {
     return res.status(422).json(
       {
       error: 'empty field'

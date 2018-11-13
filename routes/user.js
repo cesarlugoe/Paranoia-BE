@@ -4,6 +4,9 @@ const mongoose = require('mongoose');
 const User = require('../models/user');
 const Game = require('../models/game');
 const ObjectId = mongoose.Types.ObjectId;
+// const parser = require('../helpers/cloudinary.js')
+// const upload = require('../helpers/cloudinary')
+// require('../helpers/cloudinary')
 
 router.get('/', (req, res, next) => {
   const userId = req.session.currentUser._id;
@@ -21,19 +24,18 @@ router.get('/', (req, res, next) => {
     .catch(next)
 })
 
-   
+  //  parser.single('image')
 router.patch('/:_id/edit', (req, res, next) => {
   const userId = req.params._id;
-  const userInfo = req.body.userInfo;
-   User.findById(userId)
+  const quote = req.body.userInfo.quote;
+  // let image = req.file
+  // console.log(image)
+  
+
+ 
+   User.findByIdAndUpdate(userId, {quote: `${quote}`})
    .then(user => {
-     user.quote = userInfo.quote;
-     user.image = user.image;
-     user.save()
-     .then(
       res.status(200).json(user)
-     )
-     .catch(next)
    })
    .catch(next)
 })

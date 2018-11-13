@@ -35,4 +35,6 @@ function sortGame(mission, participants) {
 
 module.exports = { 
   sortGame,
+  rearrengeArray,
+  shuffleParticipants,
 };

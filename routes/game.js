@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
+const moment = require('moment');
 
 const User = require('../models/user');
 const Game = require('../models/game');
@@ -112,7 +113,7 @@ router.post('/:_id/kill', (req, res, next) => {
   .populate('admin')
   .populate('participants')
   .then(game => {
-    const { missions, participants } = game;
+    const { missions } = game;
     const userMissionIndex = missions.findIndex(mission => {
       return mission.killer.toString() === userId;
     });
@@ -120,10 +121,17 @@ router.post('/:_id/kill', (req, res, next) => {
     const newMissionIndex = missions.findIndex(mission => {
       return mission.killer.toString() === targetId.toString();
         });
+
+    const killEvent = {
+      killer: missions[userMissionIndex].killer,
+      target: missions[userMissionIndex].target,
+      mission: missions[userMissionIndex].mission,
+      date: moment().format('DD MMM HH:mm a'),
+    }     
+    game.killLog.push(killEvent);
      missions[newMissionIndex].killer = userId;
      missions.splice(userMissionIndex, 1);
      game.numberOfSurvivors =  game.numberOfSurvivors -1;
-     console.log(game.numberOfSurvivors)
       game.save()
       .then(() => {
         res.status(200).json(game);
@@ -131,4 +139,28 @@ router.post('/:_id/kill', (req, res, next) => {
       .catch(next); 
      })
   })
+
+  /* ------------ ReSort Game --------------*/
+router.get('/:_id/sort', (req, res, next) => {
+  const gameId = req.params._id;
+  
+  Game.findById(gameId)
+  .populate('admin')
+  .populate('participants')
+  .then(game => {
+    const {missions} = game;
+    const survivors = game.missions.map(mission => {
+      return mission.killer;
+    })
+    const sortedMissions = helpers.sortGame(missions, survivors);
+    game.missions = sortedMissions;
+    game.save()
+    .then(() => {
+      res.status(200).json(game);
+    })
+    .catch(next); 
+  })
+  .catch(next); 
+})
+
 module.exports = router;

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
+const moment = require('moment');
 
 const User = require('../models/user');
 const Game = require('../models/game');
@@ -117,7 +118,7 @@ router.post('/:_id/kill', (req, res, next) => {
   .populate('admin')
   .populate('participants')
   .then(game => {
-    const { missions, participants } = game;
+    const { missions } = game;
     const userMissionIndex = missions.findIndex(mission => {
       return mission.killer.toString() === userId;
     });
@@ -125,10 +126,18 @@ router.post('/:_id/kill', (req, res, next) => {
     const newMissionIndex = missions.findIndex(mission => {
       return mission.killer.toString() === targetId.toString();
         });
+
+    const killEvent = {
+      killer: missions[userMissionIndex].killer,
+      target: missions[userMissionIndex].target,
+      mission: missions[userMissionIndex].mission,
+      date: moment().format('DD MMM HH:mm a'),
+    }     
+    console.log(killEvent.date);
+    game.killLog.push(killEvent);
      missions[newMissionIndex].killer = userId;
      missions.splice(userMissionIndex, 1);
      game.numberOfSurvivors =  game.numberOfSurvivors -1;
-     console.log(game.numberOfSurvivors)
       game.save()
       .then(() => {
         res.status(200).json(game);

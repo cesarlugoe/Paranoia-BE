@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const User = require('../models/user');
 const Game = require('../models/game');
 const ObjectId = mongoose.Types.ObjectId;
+const middlewares = require('../helpers/middlewares');
 
 router.get('/', (req, res, next) => {
   const userId = req.session.currentUser._id;
@@ -22,7 +23,7 @@ router.get('/', (req, res, next) => {
 })
 
    
-router.patch('/:_id/edit', (req, res, next) => {
+router.patch('/:_id/edit', middlewares.objectIdValid,  (req, res, next) => {
   const userId = req.params._id;
   const userInfo = req.body.userInfo;
   console.log(req.body)

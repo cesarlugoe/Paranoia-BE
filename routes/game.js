@@ -8,6 +8,7 @@ const User = require('../models/user');
 const Game = require('../models/game');
 const Mission = require('../models/mission');
 const helpers= require('../helpers/helpers');
+const middlewares = require('../helpers/middlewares');
 
 
 
@@ -42,8 +43,9 @@ router.post('/join', (req, res, next) => {
 })
 
 /* ------------ Game Detail --------------*/
-router.get('/:_id', (req, res, next) => {
+router.get('/:_id', middlewares.objectIdValid, (req, res, next) => {
   const gameId = req.params._id;
+ 
 Game.findById(gameId)
   .populate('admin')
   .populate('participants')
@@ -83,7 +85,7 @@ router.post('/', (req, res, next) => {
 });
 
 /* ------------ Start Game --------------*/
-router.get('/:_id/start', (req, res, next) => {
+router.get('/:_id/start', middlewares.objectIdValid,  (req, res, next) => {
   const gameId = req.params._id;
   Game.findById(gameId)
   .populate('admin')
@@ -106,7 +108,7 @@ router.get('/:_id/start', (req, res, next) => {
 });
 
 /* ------------- Kill user ----------------*/ 
-router.post('/:_id/kill', (req, res, next) => {
+router.post('/:_id/kill', middlewares.objectIdValid,  (req, res, next) => {
   const gameId = req.params._id;
   const userId = req.session.currentUser._id;
   Game.findById(gameId)
@@ -144,7 +146,7 @@ router.post('/:_id/kill', (req, res, next) => {
   })
 
   /* ------------ ReSort Game --------------*/
-router.get('/:_id/sort', (req, res, next) => {
+router.get('/:_id/sort', middlewares.objectIdValid,  (req, res, next) => {
   const gameId = req.params._id;
   
   Game.findById(gameId)

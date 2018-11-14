@@ -6,11 +6,33 @@ const moment = require('moment');
 
 const User = require('../models/user');
 const Game = require('../models/game');
-const Mission = require('../models/mission');
-const helpers= require('../helpers/helpers');
+const helpers = require('../helpers/helpers');
+const nodemailer = require('nodemailer');
 const middlewares = require('../helpers/middlewares');
 
 
+const creds = {
+  USER: 'ester.ironhack@gmail.com', 
+  PASS: 'ironhack2018!',
+}
+
+let transport = {
+  host: 'smtp.gmail.com',
+  auth: {
+    user: creds.USER,
+    pass: creds.PASS,
+  }
+}
+
+let transporter = nodemailer.createTransport(transport);
+
+transporter.verify((error, success) => {
+  if (error) {
+    console.log(error);
+  } else {
+    console.log('Server is ready to take messages');
+  }
+});
 
 
 /* ------------- Game Join ----------------*/
@@ -58,10 +80,28 @@ Game.findById(gameId)
 
 /* ------------ Create new Game --------------*/
 router.post('/', (req, res, next) => {
-  const { roomName, mission } = req.body;
+  const { roomName, mission, message, email } = req.body;
   const adminId = req.session.currentUser._id;
-  let target = '';
-  let killer = '';
+  
+  let emailContent = `name: ${adminId} \n email: ${email} \n message: ${message}`;
+  let mail = {
+    from: adminId,
+    to: email,
+    subject: 'Paranoia Game Invite',
+    text: message,
+  }
+
+  transporter.sendMail(mail, (err, data) => {
+    if (err) {
+      res.json({
+        msg: 'fail'
+      })
+    } else {
+      res.json({
+        msg: 'success'
+      })
+    }
+  });  
   
 
   if(!roomName || !mission) {
@@ -70,6 +110,7 @@ router.post('/', (req, res, next) => {
       error: 'empty field'
     })
   }
+
 
   const newGame = new Game({ 
     roomName,

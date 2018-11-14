@@ -9,6 +9,7 @@ const Game = require('../models/game');
 const helpers = require('../helpers/helpers');
 const nodemailer = require('nodemailer');
 const middlewares = require('../helpers/middlewares');
+const qr = require('qrcode');
 
 
 const creds = {
@@ -91,15 +92,15 @@ router.post('/', (req, res, next) => {
     }
 
     transporter.sendMail(mail, (err, data) => {
-      if (err) {
-        res.json({
-          msg: 'fail'
-        })
-      } else {
-        res.json({
-          msg: 'success'
-        })
-      }
+      // if (err) {
+      //   res.json({
+      //     msg: 'fail'
+      //   })
+      // } else {
+      //   res.json({
+      //     msg: 'success'
+      //   })
+      // }
     });  
 }
   
@@ -207,5 +208,13 @@ router.get('/:_id/sort', middlewares.objectIdValid,  (req, res, next) => {
   })
   .catch(next); 
 })
+
+
+/*------------ Generate QR -----------------*/
+router.get('/:_id/qr', middlewares.objectIdValid, (req, res, next) => {
+   let url = ''
+   const promise = qrcode.toDataURL(url)
+})
+
 
 module.exports = router;

@@ -80,7 +80,6 @@ Game.findById(gameId)
 router.post('/', (req, res, next) => {
   const { roomName, mission, message, email } = req.body;
   const adminId = req.session.currentUser._id;
-  
   if (email) {
     let mail = {
       from: adminId,
@@ -110,9 +109,6 @@ router.post('/', (req, res, next) => {
     })
   }
 
- 
-
-  
   const newGame = new Game({ 
     roomName,
     missions: {mission: mission},

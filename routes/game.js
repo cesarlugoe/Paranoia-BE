@@ -81,25 +81,26 @@ router.post('/', (req, res, next) => {
   const { roomName, mission, message, email } = req.body;
   const adminId = req.session.currentUser._id;
   
-  let emailContent = `name: ${adminId} \n email: ${email} \n message: ${message}`;
-  let mail = {
-    from: adminId,
-    to: email,
-    subject: 'Paranoia Game Invite',
-    text: message,
-  }
-
-  transporter.sendMail(mail, (err, data) => {
-    if (err) {
-      res.json({
-        msg: 'fail'
-      })
-    } else {
-      res.json({
-        msg: 'success'
-      })
+  if (email) {
+    let mail = {
+      from: adminId,
+      to: email,
+      subject: 'Paranoia Game Invite',
+      text: message,
     }
-  });  
+
+    transporter.sendMail(mail, (err, data) => {
+      if (err) {
+        res.json({
+          msg: 'fail'
+        })
+      } else {
+        res.json({
+          msg: 'success'
+        })
+      }
+    });  
+}
   
 
   if(!roomName || !mission) {

@@ -64,7 +64,7 @@ router.post('/', (req, res, next) => {
   let killer = '';
   
 
-  if(!roomName) {
+  if(!roomName || !mission) {
     return res.status(422).json(
       {
       error: 'empty field'

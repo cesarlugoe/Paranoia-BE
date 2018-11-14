@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 
 const User = require('../models/user');
 
-const { isLoggedIn } = require('../helpers/middlewares');
+const middlewares  = require('../helpers/middlewares');
 
 router.get('/me', (req, res, next) => {
   if (req.session.currentUser) {
@@ -23,7 +23,7 @@ router.post('/login', (req, res, next) => {
     });
   }
 
-  const { username, password, email } = req.body;
+  const { username, password } = req.body;
 
   if (!username || !password) {
     return res.status(422).json({
@@ -98,7 +98,7 @@ router.post('/logout', (req, res) => {
   return res.status(204).send();
 });
 
-router.get('/private', isLoggedIn(), (req, res, next) => {
+router.get('/private', middlewares.isLoggedIn, (req, res, next) => {
   res.status(200).json({
     message: 'This is a private message'
   });

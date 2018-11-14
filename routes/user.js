@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const User = require('../models/user');
 const Game = require('../models/game');
 const ObjectId = mongoose.Types.ObjectId;
+const middlewares = require('../helpers/middlewares');
 const uploadCloud = require('../helpers/cloudinary.js')
 
 router.get('/', (req, res, next) => {
@@ -22,8 +23,8 @@ router.get('/', (req, res, next) => {
     .catch(next)
 })
 
-  //  parser.single('image')
-router.patch('/:_id/edit', (req, res, next) => {
+   
+router.patch('/:_id/edit', middlewares.objectIdValid,  (req, res, next) => {
   const userId = req.params._id;
   const quote = req.body.userInfo.quote;
   
@@ -36,7 +37,7 @@ router.patch('/:_id/edit', (req, res, next) => {
 
 router.patch('/:_id/picture', uploadCloud.single('picture'), (req, res, next) => {
   const userId = req.params._id;
-  let image = req.file
+  let image = req.file;
   console.log(image)
   User.findByIdAndUpdate(userId, { $set: { image: image.url }}, {new: true})
   .then((user) => {

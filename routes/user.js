@@ -35,10 +35,10 @@ router.patch('/:_id/edit', middlewares.objectIdValid,  (req, res, next) => {
    .catch(next)
 })
 
-router.patch('/:_id/picture', uploadCloud.single('picture'), (req, res, next) => {
+router.patch('/:_id/picture', (req, res, next) => {
   const userId = req.params._id;
-  let image = req.file;
-  User.findByIdAndUpdate(userId, { $set: { image: image.url }}, {new: true})
+  let image = req.body.picURL;
+  User.findByIdAndUpdate(userId, { $set: { image: image }}, {new: true})
   .then((user) => {
     res.status(200).json(user)
   })

@@ -43,7 +43,7 @@ router.patch('/:_id/picture', uploadCloud.single('picture'), (req, res, next) =>
   .then((user) => {
     res.status(200).json(user)
   })
-  
+  .catch(next)
 })
 
 

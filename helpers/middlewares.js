@@ -14,7 +14,6 @@ function isLoggedIn (req, res, next) {
 function objectIdValid (req, res, next) {
   let objectId = req.params._id;
   objectId = mongoose.Types.ObjectId.isValid(objectId);
-  console.log(objectId);
   if (!objectId) { return res.status(404).json({ code: 'not found' }) }
   next();
 }

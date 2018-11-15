@@ -38,7 +38,6 @@ router.patch('/:_id/edit', middlewares.objectIdValid,  (req, res, next) => {
 router.patch('/:_id/picture', (req, res, next) => {
   const userId = req.params._id;
   let image = req.body.picURL;
-  console.log(image);
   User.findByIdAndUpdate(userId, { $set: { image: image }}, {new: true})
   .then((user) => {
     res.status(200).json(user)

@@ -69,14 +69,14 @@ router.post('/join', (req, res, next) => {
 router.get('/:_id', middlewares.objectIdValid, (req, res, next) => {
   const gameId = req.params._id;
  
-Game.findById(gameId)
-  .populate('admin')
-  .populate('participants')
-  .then((game) => {
-    
-    res.status(200).json(game);
-  })
-  .catch(next);
+  Game.findById(gameId)
+    .populate('admin')
+    .populate('participants')
+    .then((game) => {
+      
+      res.status(200).json(game);
+    })
+    .catch(next);
 })
 
 /* ------------ Create new Game --------------*/
@@ -108,7 +108,7 @@ router.post('/', (req, res, next) => {
   if(!roomName || !mission) {
     return res.status(422).json(
       {
-      error: 'empty field'
+      error: 'Empty fields'
     })
   }
 

@@ -91,15 +91,15 @@ router.post('/', (req, res, next) => {
     }
 
     transporter.sendMail(mail, (err, data) => {
-      if (err) {
-        res.json({
-          msg: 'fail'
-        })
-      } else {
-        res.json({
-          msg: 'success'
-        })
-      }
+      // if (err) {
+      //   res.json({
+      //     msg: 'fail'
+      //   })
+      // } else {
+      //   res.json({
+      //     msg: 'success'
+      //   })
+      // }
     });  
 }
   
@@ -107,7 +107,7 @@ router.post('/', (req, res, next) => {
   if(!roomName || !mission) {
     return res.status(422).json(
       {
-      error: 'empty field'
+      error: 'Empty fields'
     })
   }
 
